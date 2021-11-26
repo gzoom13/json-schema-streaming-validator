@@ -13,7 +13,6 @@ dependencies {
     val jacksonVersion = "2.12.5"
     compileOnly("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
     testImplementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
-    testImplementation("org.cactoos:cactoos:0.50")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
