@@ -18,6 +18,11 @@ class RequiredPropertiesTest {
     private String testDirectoryName = "required";
 
     @Test
+    void newValidationContextHasNoErrors() {
+        assertFalse(new RequiredProperties.ValidationContext().hasErrors());
+    }
+
+    @Test
     void invalidRequiredObjectProperties() throws IOException {
         assertFalse(test("valid.json").hasErrors());
     }
