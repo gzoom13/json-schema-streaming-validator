@@ -33,7 +33,7 @@ class RequiredPropertiesTest {
     }
 
     private ValidationContext test(String fileName) throws IOException {
-        JsonFactory factory = JsonFactory.builder().build();
+        JsonFactory factory = new JsonFactory();
         List<String> properties = Arrays.asList("latitude", "longitude");
         RequiredProperties.ValidationContext res = new RequiredProperties.ValidationContext(properties);
         try (JsonParser p = factory.createParser(getClass().getResource(resourceName(fileName)));

@@ -1,9 +1,7 @@
 package net.golikov.json.schema.validator.stream;
 
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.async.NonBlockingInputFeeder;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.core.util.JacksonFeatureSet;
 import com.fasterxml.jackson.core.util.RequestPayload;
 
 import java.io.File;
@@ -207,53 +205,6 @@ public class JsonParserWrapper extends JsonParser implements CurrentToken {
     }
 
     /**
-     * Method that can be called to determine if this parser instance
-     * uses non-blocking ("asynchronous") input access for decoding or not.
-     * Access mode is determined by earlier calls via {@link JsonFactory};
-     * it may not be changed after construction.
-     *<p>
-     * If non-blocking decoding is (@code true}, it is possible to call
-     * {@link #getNonBlockingInputFeeder()} to obtain object to use
-     * for feeding input; otherwise (<code>false</code> returned)
-     * input is read by blocking
-     *
-     * @return True if this is a non-blocking ("asynchronous") parser
-     *
-     * @since 2.9
-     */
-    @Override
-    public boolean canParseAsync() {
-        return delegate.canParseAsync();
-    }
-
-    /**
-     * Method that will either return a feeder instance (if parser uses
-     * non-blocking, aka asynchronous access); or <code>null</code> for
-     * parsers that use blocking I/O.
-     *
-     * @return Input feeder to use with non-blocking (async) parsing
-     *
-     * @since 2.9
-     */
-    @Override
-    public NonBlockingInputFeeder getNonBlockingInputFeeder() {
-        return delegate.getNonBlockingInputFeeder();
-    }
-
-    /**
-     * Accessor for getting metadata on capabilities of this parser, based on
-     * underlying data format being read (directly or indirectly).
-     *
-     * @return Set of read capabilities for content to read via this parser
-     *
-     * @since 2.12
-     */
-    @Override
-    public JacksonFeatureSet<StreamReadCapability> getReadCapabilities() {
-        return delegate.getReadCapabilities();
-    }
-
-    /**
      * Accessor for getting version of the core package, given a parser instance.
      * Left for sub-classes to implement.
      *
@@ -447,20 +398,6 @@ public class JsonParserWrapper extends JsonParser implements CurrentToken {
      */
     @Override
     public boolean isEnabled(Feature f) {
-        return delegate.isEnabled(f);
-    }
-
-    /**
-     * Method for checking whether specified {@link Feature} is enabled.
-     *
-     * @param f Feature to check
-     *
-     * @return {@code True} if feature is enabled; {@code false} otherwise
-     *
-     * @since 2.10
-     */
-    @Override
-    public boolean isEnabled(StreamReadFeature f) {
         return delegate.isEnabled(f);
     }
 
@@ -940,46 +877,6 @@ public class JsonParserWrapper extends JsonParser implements CurrentToken {
     }
 
     /**
-     * Similar to {@link #isExpectedStartArrayToken()}, but checks whether stream
-     * currently points to {@link JsonToken#VALUE_NUMBER_INT}.
-     *<p>
-     * The initial use case is for XML backend to efficiently (attempt to) coerce
-     * textual content into numbers.
-     *
-     * @return True if the current token can be considered as a
-     *   start-array marker (such {@link JsonToken#VALUE_NUMBER_INT});
-     *   {@code false} if not
-     *
-     * @since 2.12
-     */
-    @Override
-    public boolean isExpectedNumberIntToken() {
-        return delegate.isExpectedNumberIntToken();
-    }
-
-    /**
-     * Access for checking whether current token is a numeric value token, but
-     * one that is of "not-a-number" (NaN) variety (including both "NaN" AND
-     * positive/negative infinity!): not supported by all formats,
-     * but often supported for {@link JsonToken#VALUE_NUMBER_FLOAT}.
-     * NOTE: roughly equivalent to calling <code>!Double.isFinite()</code>
-     * on value you would get from calling {@link #getDoubleValue()}.
-     *
-     * @return {@code True} if the current token is of type {@link JsonToken#VALUE_NUMBER_FLOAT}
-     *   but represents a "Not a Number"; {@code false} for other tokens and regular
-     *   floating-point numbers
-     *
-     * @throws IOException for low-level read issues, or
-     *   {@link JsonParseException} for decoding problems
-     *
-     * @since 2.9
-     */
-    @Override
-    public boolean isNaN() throws IOException {
-        return delegate.isNaN();
-    }
-
-    /**
      * Method called to "consume" the current token by effectively
      * removing it so that {@link #hasCurrentToken} returns false, and
      * {@link #getCurrentToken} null).
@@ -1037,25 +934,6 @@ public class JsonParserWrapper extends JsonParser implements CurrentToken {
     @Override
     public String getCurrentName() throws IOException {
         return delegate.getCurrentName();
-    }
-
-    /**
-     * Method that can be called to get the name associated with
-     * the current token: for {@link JsonToken#FIELD_NAME}s it will
-     * be the same as what {@link #getText} returns;
-     * for field values it will be preceding field name;
-     * and for others (array values, root-level values) null.
-     *
-     * @return Name of the current field in the parsing context
-     *
-     * @throws IOException for low-level read issues, or
-     *   {@link JsonParseException} for decoding problems
-     *
-     * @since 2.10
-     */
-    @Override
-    public String currentName() throws IOException {
-        return delegate.currentName();
     }
 
     /**
@@ -1208,30 +1086,6 @@ public class JsonParserWrapper extends JsonParser implements CurrentToken {
     @Override
     public Number getNumberValue() throws IOException {
         return delegate.getNumberValue();
-    }
-
-    /**
-     * Method similar to {@link #getNumberValue} with the difference that
-     * for floating-point numbers value returned may be {@link BigDecimal}
-     * if the underlying format does not store floating-point numbers using
-     * native representation: for example, textual formats represent numbers
-     * as Strings (which are 10-based), and conversion to {@link Double}
-     * is potentially lossy operation.
-     *<p>
-     * Default implementation simply returns {@link #getNumberValue()}
-     *
-     * @return Numeric value of the current token using most accurate representation
-     *
-     * @throws IOException Problem with access: {@link JsonParseException} if
-     *    the current token is not numeric, or if decoding of the value fails
-     *    (invalid format for numbers); plain {@link IOException} if underlying
-     *    content read fails (possible if values are extracted lazily)
-     *
-     * @since 2.12
-     */
-    @Override
-    public Number getNumberValueExact() throws IOException {
-        return delegate.getNumberValueExact();
     }
 
     /**
@@ -1956,23 +1810,6 @@ public class JsonParserWrapper extends JsonParser implements CurrentToken {
     @Override
     public <T> Iterator<T> readValuesAs(Class<T> valueType) throws IOException {
         return delegate.readValuesAs(valueType);
-    }
-
-    /**
-     * Method for reading sequence of Objects from parser stream,
-     * all with same specified value type.
-     *
-     * @param valueTypeRef Java type to read content as (passed to ObjectCodec that
-     *    deserializes content)
-     *
-     * @return Iterator for reading multiple Java values from content
-     *
-     * @throws IOException if there is either an underlying I/O problem or decoding
-     *    issue at format layer
-     */
-    @Override
-    public <T> Iterator<T> readValuesAs(TypeReference<T> valueTypeRef) throws IOException {
-        return delegate.readValuesAs(valueTypeRef);
     }
 
     /**

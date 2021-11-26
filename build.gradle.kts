@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    val jacksonVersion = "2.12.5"
+    val jacksonVersion = "2.8.9"
     compileOnly("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
     testImplementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
