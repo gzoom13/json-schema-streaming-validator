@@ -20,6 +20,14 @@ public class RequiredPropertiesTestCase {
         this.initialContext = initialContext;
     }
 
+    public static RequiredPropertiesTestCase invalid(RequiredProperties.ValidationContext initialContext) {
+        return new RequiredPropertiesTestCase(initialContext, "invalid.json");
+    }
+
+    public static RequiredPropertiesTestCase valid(RequiredProperties.ValidationContext initialContext) {
+        return new RequiredPropertiesTestCase(initialContext, "valid.json");
+    }
+
     public ValidationContext result() throws IOException {
         JsonFactory factory = new JsonFactory();
         RequiredProperties.ValidationContext res = this.initialContext;

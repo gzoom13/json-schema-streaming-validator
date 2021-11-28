@@ -7,6 +7,7 @@ import net.golikov.json.schema.stream.required.RequiredPropertiesTestCase;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,9 +32,9 @@ class RequiredPropertiesJsonSchemaTest {
     @Test
     void returnsResultWithRequiredFields() throws IOException {
         ValidationContext validationContext = parse("schema.json").getResult().get();
-        assertThat(new RequiredPropertiesTestCase(validationContext, "invalid.json")
+        assertThat(RequiredPropertiesTestCase.invalid(validationContext)
                 .result().hasErrors()).isTrue();
-        assertThat(new RequiredPropertiesTestCase(validationContext, "valid.json")
+        assertThat(RequiredPropertiesTestCase.valid(validationContext)
                 .result().hasErrors()).isFalse();
     }
 

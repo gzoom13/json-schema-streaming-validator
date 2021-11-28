@@ -13,28 +13,20 @@ public class RequiredPropertiesTest {
 
     @Test
     public void noRequiredPropertiesReturnNoErrors() throws Exception {
-        assertFalse(new RequiredPropertiesTestCase(new ValidationContext(Collections.emptyList()), "invalid.json")
+        assertFalse(RequiredPropertiesTestCase.invalid(new ValidationContext(Collections.emptyList()))
                 .result().hasErrors());
     }
 
     @Test
     public void invalidRequiredObjectProperties() throws Exception {
-        assertTrue(invalid()
+        assertTrue(RequiredPropertiesTestCase.invalid(new ValidationContext(Arrays.asList("latitude", "longitude")))
                 .result().hasErrors());
-    }
-
-    public static RequiredPropertiesTestCase invalid() {
-        return new RequiredPropertiesTestCase(new ValidationContext(Arrays.asList("latitude", "longitude")), "invalid.json");
     }
 
     @Test
     public void validRequiredObjectProperties() throws Exception {
-        assertFalse(valid()
+        assertFalse(RequiredPropertiesTestCase.valid(new ValidationContext(Arrays.asList("latitude", "longitude")))
                 .result().hasErrors());
-    }
-
-    public static RequiredPropertiesTestCase valid() {
-        return new RequiredPropertiesTestCase(new ValidationContext(Arrays.asList("latitude", "longitude")), "valid.json");
     }
 
 }
