@@ -29,7 +29,7 @@ public class RequiredPropertiesJsonSchema {
                     FIELD_NAME, required.getNodeType())));
         }
         List<JsonNodeType> notTextualNodeTypes = new ArrayList<>(0);
-        List<String> requiredPropertyNames = new ArrayList<>(4);
+        List<String> requiredPropertyNames = new ArrayList<>();
         for (JsonNode jsonNode : required) {
             if (jsonNode.isTextual()) {
                 requiredPropertyNames.add(jsonNode.textValue());
