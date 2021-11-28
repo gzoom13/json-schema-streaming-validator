@@ -1,18 +1,16 @@
 package net.golikov.json.schema.stream.parse;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 public class ParseResult<T> {
     private T result = null;
-    private List<String> errors = Collections.emptyList();
+    private Optional<String> error = Optional.empty();
 
     public ParseResult() {
     }
 
-    public ParseResult(List<String> errors) {
-        this.errors = errors;
+    public ParseResult(String error) {
+        this.error = Optional.of(error);
     }
 
     public ParseResult(T result) {
@@ -23,7 +21,7 @@ public class ParseResult<T> {
         return Optional.ofNullable(result);
     }
 
-    public List<String> getErrors() {
-        return Collections.unmodifiableList(errors);
+    public Optional<String> getError() {
+        return error;
     }
 }

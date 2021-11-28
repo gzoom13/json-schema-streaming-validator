@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import net.golikov.json.schema.stream.RequiredProperties;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class RequiredPropertiesJsonSchema {
 
@@ -25,8 +25,8 @@ public class RequiredPropertiesJsonSchema {
             return new ParseResult<>();
         }
         if (!required.isArray()) {
-            return new ParseResult<>(Collections.singletonList(String.format("\"%s\" field contains %s instead of array",
-                    FIELD_NAME, required.getNodeType())));
+            return new ParseResult<>(String.format("\"%s\" field contains %s instead of array",
+                    FIELD_NAME, required.getNodeType()));
         }
         List<JsonNodeType> notTextualNodeTypes = new ArrayList<>(0);
         List<String> requiredPropertyNames = new ArrayList<>();
@@ -38,11 +38,26 @@ public class RequiredPropertiesJsonSchema {
             }
         }
         if (!notTextualNodeTypes.isEmpty()) {
-            return new ParseResult<>(Collections.singletonList(String.format("\"%s\" field contains array, " +
+            return new ParseResult<>(String.format("\"%s\" field contains array, " +
                             "including %s node types instead of only strings",
-                    FIELD_NAME, notTextualNodeTypes)));
+                    FIELD_NAME, notTextualNodeTypes));
+        }
+        List<String> duplicates = duplicates(requiredPropertyNames);
+        if (!duplicates.isEmpty()) {
+            return new ParseResult<>(String.format("\"%s\" field contains duplicates: %s",
+                    FIELD_NAME, duplicates));
         }
         return new ParseResult<>(new RequiredProperties.ValidationContext(requiredPropertyNames));
+    }
+
+    private List<String> duplicates(List<String> requiredPropertyNames) {
+        return requiredPropertyNames.stream()
+                .collect(Collectors.groupingBy(Function.identity()))
+                .values()
+                .stream()
+                .filter(l -> l.size() > 1)
+                .map(l -> l.get(0))
+                .collect(Collectors.toList());
     }
 
 }

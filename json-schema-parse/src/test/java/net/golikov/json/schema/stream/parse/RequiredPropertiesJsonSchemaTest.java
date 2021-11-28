@@ -7,7 +7,6 @@ import net.golikov.json.schema.stream.required.RequiredPropertiesTestCase;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,7 +14,7 @@ class RequiredPropertiesJsonSchemaTest {
 
     @Test
     void returnsNoResultIfNoRequiredField() throws IOException {
-        assertThat(parse("empty.json").getErrors()).isEmpty();
+        assertThat(parse("empty.json").getError()).isEmpty();
         assertThat(parse("empty.json").getResult()).isEmpty();
     }
 
@@ -30,6 +29,11 @@ class RequiredPropertiesJsonSchemaTest {
     }
 
     @Test
+    void returnsErrorIfRequiredFieldContainsArrayNotUniqueStrings() throws IOException {
+        assertHasErrors(parse("not-unique.json"));
+    }
+
+    @Test
     void returnsResultWithRequiredFields() throws IOException {
         ValidationContext validationContext = parse("schema.json").getResult().get();
         assertThat(RequiredPropertiesTestCase.invalid(validationContext)
@@ -39,7 +43,7 @@ class RequiredPropertiesJsonSchemaTest {
     }
 
     private void assertHasErrors(ParseResult<ValidationContext> parse) {
-        assertThat(parse.getErrors()).isNotEmpty();
+        assertThat(parse.getError()).isNotEmpty();
     }
 
     private ParseResult<ValidationContext> parse(String fileName) throws IOException {
