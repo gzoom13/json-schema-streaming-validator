@@ -1,9 +1,9 @@
-package net.golikov.json.schema.validation.stream.parse;
+package net.golikov.json.schema.stream.parse;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.golikov.json.schema.validation.stream.RequiredProperties.ValidationContext;
-import net.golikov.json.schema.validation.stream.RequiredPropertiesTestCase;
+import net.golikov.json.schema.stream.RequiredProperties.ValidationContext;
+import net.golikov.json.schema.stream.required.RequiredPropertiesTestCase;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -44,8 +44,7 @@ class RequiredPropertiesJsonSchemaTest {
     private ParseResult<ValidationContext> parse(String fileName) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        JsonNode jsonNode = objectMapper.readTree(getClass().getResource(
-                "/net/golikov/json/schema/validation/stream/required/parse/schema/" + fileName));
+        JsonNode jsonNode = objectMapper.readTree(RequiredPropertiesTestCase.class.getResource("parse/" + fileName));
         return new RequiredPropertiesJsonSchema(jsonNode).read();
     }
 

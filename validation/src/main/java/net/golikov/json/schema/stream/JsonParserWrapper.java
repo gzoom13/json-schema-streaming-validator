@@ -1,4 +1,4 @@
-package net.golikov.json.schema.validation.stream;
+package net.golikov.json.schema.stream;
 
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.TypeReference;

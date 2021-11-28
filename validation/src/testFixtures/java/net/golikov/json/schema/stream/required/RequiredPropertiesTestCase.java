@@ -1,15 +1,15 @@
-package net.golikov.json.schema.validation.stream;
+package net.golikov.json.schema.stream.required;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import net.golikov.json.schema.stream.JsonParserWrapper;
+import net.golikov.json.schema.stream.RequiredProperties;
+import net.golikov.json.schema.stream.ValidationContext;
 
-import java.io.File;
 import java.io.IOException;
 
 public class RequiredPropertiesTestCase {
-
-    private static final String testDirectoryName = "required";
 
     private final String testCaseFileName;
     private final RequiredProperties.ValidationContext initialContext;
@@ -23,7 +23,7 @@ public class RequiredPropertiesTestCase {
     public ValidationContext result() throws IOException {
         JsonFactory factory = new JsonFactory();
         RequiredProperties.ValidationContext res = this.initialContext;
-        try (JsonParser p = factory.createParser(getClass().getResource(testDirectoryName + File.separatorChar + testCaseFileName));
+        try (JsonParser p = factory.createParser(getClass().getResource(testCaseFileName));
              JsonParserWrapper parser = new JsonParserWrapper(p)) {
             RequiredProperties validator = new RequiredProperties();
             JsonToken jsonToken = parser.nextToken();

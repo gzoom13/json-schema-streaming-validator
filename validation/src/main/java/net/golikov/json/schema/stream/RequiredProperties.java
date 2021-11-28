@@ -1,4 +1,4 @@
-package net.golikov.json.schema.validation.stream;
+package net.golikov.json.schema.stream;
 
 import com.fasterxml.jackson.core.JsonToken;
 
@@ -21,7 +21,7 @@ public class RequiredProperties {
         return context;
     }
 
-    public static class ValidationContext implements net.golikov.json.schema.validation.stream.ValidationContext {
+    public static class ValidationContext implements net.golikov.json.schema.stream.ValidationContext {
 
         private final List<String> notFoundYet;
 

@@ -1,4 +1,4 @@
-package net.golikov.json.schema.validation.stream.parse;
+package net.golikov.json.schema.stream.parse;
 
 import java.util.Collections;
 import java.util.List;

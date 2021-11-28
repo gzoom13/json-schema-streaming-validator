@@ -1,9 +1,9 @@
-package net.golikov.json.schema.validation.stream.parse;
+package net.golikov.json.schema.stream.parse;
 
 import com.fasterxml.jackson.core.JsonPointer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import net.golikov.json.schema.validation.stream.RequiredProperties;
+import net.golikov.json.schema.stream.RequiredProperties;
 
 import java.util.ArrayList;
 import java.util.Collections;

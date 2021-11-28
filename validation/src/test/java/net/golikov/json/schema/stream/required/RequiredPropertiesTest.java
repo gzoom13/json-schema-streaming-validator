@@ -1,6 +1,6 @@
-package net.golikov.json.schema.validation.stream;
+package net.golikov.json.schema.stream.required;
 
-import net.golikov.json.schema.validation.stream.RequiredProperties.ValidationContext;
+import net.golikov.json.schema.stream.RequiredProperties.ValidationContext;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
