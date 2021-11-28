@@ -38,11 +38,11 @@ public class RequiredPropertiesJsonSchema {
             }
         }
         if (!notTextualNodeTypes.isEmpty()) {
-            return new ParseResult<>(Collections.singletonList(String.format("\"%s\" field contains %s instead of array",
-                    FIELD_NAME, required.getNodeType())));
-        } else {
-            return new ParseResult<>(new RequiredProperties.ValidationContext(requiredPropertyNames));
+            return new ParseResult<>(Collections.singletonList(String.format("\"%s\" field contains array, " +
+                            "including %s node types instead of only strings",
+                    FIELD_NAME, notTextualNodeTypes)));
         }
+        return new ParseResult<>(new RequiredProperties.ValidationContext(requiredPropertyNames));
     }
 
 }
