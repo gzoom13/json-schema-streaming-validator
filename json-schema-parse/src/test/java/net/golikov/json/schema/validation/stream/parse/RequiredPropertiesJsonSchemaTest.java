@@ -19,6 +19,12 @@ class RequiredPropertiesJsonSchemaTest {
         assertFalse(parse("empty.json").hasResult());
     }
 
+    @Test
+    void returnsErrorIfRequiredFieldContainsNoArray() throws IOException {
+        assertFalse(parse("not-array.json").getErrors().isEmpty());
+    }
+
+
     private ParseResult<RequiredProperties> parse(String fileName) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(getClass().getResource(testDirectoryName + File.separatorChar + fileName));
