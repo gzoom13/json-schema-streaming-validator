@@ -1,5 +1,6 @@
 plugins {
     java
+    `java-test-fixtures`
 }
 
 group = "net.golikov"
@@ -12,7 +13,7 @@ repositories {
 dependencies {
     val jacksonVersion = "2.8.9"
     compileOnly("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
-    testImplementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+    testFixturesImplementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }

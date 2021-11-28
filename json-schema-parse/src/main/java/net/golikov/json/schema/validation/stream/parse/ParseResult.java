@@ -2,6 +2,7 @@ package net.golikov.json.schema.validation.stream.parse;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class ParseResult<T> {
     private T result = null;
@@ -18,8 +19,8 @@ public class ParseResult<T> {
         this.result = result;
     }
 
-    public boolean hasResult() {
-        return errors.isEmpty() && result != null;
+    public Optional<T> getResult() {
+        return Optional.ofNullable(result);
     }
 
     public List<String> getErrors() {

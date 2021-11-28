@@ -2,34 +2,51 @@ package net.golikov.json.schema.validation.stream.parse;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.golikov.json.schema.validation.stream.RequiredProperties;
+import net.golikov.json.schema.validation.stream.RequiredProperties.ValidationContext;
+import net.golikov.json.schema.validation.stream.RequiredPropertiesTestCase;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class RequiredPropertiesJsonSchemaTest {
 
-    private static final String testDirectoryName = "required";
-
     @Test
     void returnsNoResultIfNoRequiredField() throws IOException {
-        assertFalse(parse("empty.json").hasResult());
+        assertThat(parse("empty.json").getErrors()).isEmpty();
+        assertThat(parse("empty.json").getResult()).isEmpty();
     }
 
     @Test
     void returnsErrorIfRequiredFieldContainsNoArray() throws IOException {
-        assertFalse(parse("not-array.json").getErrors().isEmpty());
+        assertHasErrors(parse("not-array.json"));
     }
 
+    @Test
+    void returnsErrorIfRequiredFieldContainsArrayWithNotOnlyStrings() throws IOException {
+        assertHasErrors(parse("not-strings.json"));
+    }
 
-    private ParseResult<RequiredProperties> parse(String fileName) throws IOException {
+    @Test
+    void returnsResultWithRequiredFields() throws IOException {
+        ValidationContext validationContext = parse("schema.json").getResult().get();
+        assertThat(new RequiredPropertiesTestCase(validationContext, "invalid.json")
+                .result().hasErrors()).isTrue();
+        assertThat(new RequiredPropertiesTestCase(validationContext, "valid.json")
+                .result().hasErrors()).isFalse();
+    }
+
+    private void assertHasErrors(ParseResult<ValidationContext> parse) {
+        assertThat(parse.getErrors()).isNotEmpty();
+    }
+
+    private ParseResult<ValidationContext> parse(String fileName) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(getClass().getResource(testDirectoryName + File.separatorChar + fileName));
-        ParseResult<RequiredProperties> result = new RequiredPropertiesJsonSchema(jsonNode).read();
-        return result;
+
+        JsonNode jsonNode = objectMapper.readTree(getClass().getResource(
+                "/net/golikov/json/schema/validation/stream/required/parse/schema/" + fileName));
+        return new RequiredPropertiesJsonSchema(jsonNode).read();
     }
 
 }

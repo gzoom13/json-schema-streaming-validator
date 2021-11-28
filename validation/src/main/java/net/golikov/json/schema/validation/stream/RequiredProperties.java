@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class RequiredProperties {
 
     public RequiredProperties.ValidationContext validate(RequiredProperties.ValidationContext context, CurrentToken token) throws IOException {
+        if (context.notFoundYet.isEmpty()) {
+            return context;
+        }
         if (token.currentToken() == JsonToken.FIELD_NAME) {
             ArrayList<String> strings = new ArrayList<>(context.notFoundYet);
             if (strings.remove(token.getText())) {
@@ -25,10 +27,6 @@ public class RequiredProperties {
 
         public ValidationContext(List<String> requiredPropertyNames) {
             this.notFoundYet = requiredPropertyNames;
-        }
-
-        public ValidationContext() {
-            this(Collections.emptyList());
         }
 
         @Override
